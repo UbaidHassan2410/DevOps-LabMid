@@ -1,0 +1,7 @@
+__pycache__/
+.pytest_cache/
+*.db
+.env
+results.xml
+report-output.json
+test-report.json
