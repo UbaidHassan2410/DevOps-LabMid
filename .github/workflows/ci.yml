@@ -13,7 +13,7 @@ jobs:
       - name: Install dependencies
         run: python -m pip install -r requirements.txt
       - name: Run tests (keep report stage running)
-        shell: bash
+        shell: powershell
         run: |
           python -m pytest tests/ -v --junitxml=results.xml || true
       - name: Build JSON report
@@ -21,13 +21,13 @@ jobs:
         run: python make_report.py
       - name: Deliver report to computer
         if: always()
-        shell: bash
+        shell: powershell
         env:
           REPORT_TOKEN: ${{ secrets.REPORT_TOKEN }}
         run: |
           curl --fail --show-error --retry 3 -X POST http://127.0.0.1:5001/report -H 'Content-Type: application/json' -H "X-Report-Token: $REPORT_TOKEN" --data-binary @report-output.json
       - name: Enforce test failure
         if: always()
-        shell: bash
+        shell: powershell
         run: |
           python -c "import json,sys; d=json.load(open('report-output.json'));sys.exit(0 if d['overall_status']=='passed' else 1)"
