@@ -5,3 +5,4 @@ __pycache__/
 results.xml
 report-output.json
 test-report.json
+actions-runner/
