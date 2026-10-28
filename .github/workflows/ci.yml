@@ -23,4 +23,4 @@ jobs:
       - name: Deliver report to computer
         if: always()
         run: |
-          & "curl.exe" -X POST http://127.0.0.1:5001/report -H "X-Report-Token: lab-local-token" -H "Content-Type: application/json" -d "@test-report.json"
+          python -c "import urllib.request; req = urllib.request.Request('http://127.0.0.1:5001/report', data=open('test-report.json', 'rb').read(), headers={'X-Report-Token': 'lab-local-token', 'Content-Type': 'application/json'}, method='POST'); print(urllib.request.urlopen(req).read().decode())"
