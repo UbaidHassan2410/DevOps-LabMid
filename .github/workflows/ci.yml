@@ -22,4 +22,5 @@ jobs:
 
       - name: Deliver report to computer
         if: always()
-        run: python receiver.py
+        run: |
+          curl -X POST http://127.0.0.1:5001/report -H "X-Report-Token: lab-local-token" -H "Content-Type: application/json" -d "@test-report.json"
