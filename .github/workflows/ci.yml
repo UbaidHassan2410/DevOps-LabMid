@@ -24,3 +24,29 @@ jobs:
         if: always()
         run: |
           python -c "import urllib.request; req = urllib.request.Request('http://127.0.0.1:5001/report', data=open('report-output.json', 'rb').read(), headers={'X-Report-Token': 'lab-local-token', 'Content-Type': 'application/json'}, method='POST'); print(urllib.request.urlopen(req).read().decode())"
+
+  # --- ADD THIS DEPLOY JOB BELOW ---
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'docs'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
